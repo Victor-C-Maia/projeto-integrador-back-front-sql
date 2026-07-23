@@ -1,0 +1,14 @@
+# Node
+backend/node_modules/
+
+# Variáveis de ambiente
+backend/.env
+
+# Logs
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/yarn-error.log*
+
+# Sistema
+.DS_Store
+Thumbs.db
