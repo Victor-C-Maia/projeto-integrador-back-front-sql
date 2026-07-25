@@ -1,0 +1,387 @@
+/* ============================================================
+   RESET
+============================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ============================================================
+   GERAL
+============================================================ */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+}
+
+/* ============================================================
+   LAYOUT
+============================================================ */
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ============================================================
+   MENU LATERAL
+============================================================ */
+
+.sidebar {
+    width: 250px;
+    background: #1f3c88;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    text-align: center;
+    padding: 30px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.15);
+}
+
+.logo i {
+    font-size: 42px;
+    margin-bottom: 12px;
+}
+
+.logo h2 {
+    font-size: 22px;
+}
+
+/* ============================================================
+   MENU
+============================================================ */
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+}
+
+.sidebar button {
+
+    background: transparent;
+
+    border: none;
+
+    color: white;
+
+    text-align: left;
+
+    padding: 15px 22px;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+.sidebar button i {
+    width: 25px;
+}
+
+.sidebar button:hover {
+
+    background: rgba(255,255,255,.15);
+
+}
+
+.sidebar button.ativo {
+
+    background: rgba(255,255,255,.25);
+
+}
+
+/* ============================================================
+   ÁREA PRINCIPAL
+============================================================ */
+
+.conteudo {
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+.topbar {
+
+    background: white;
+
+    padding: 22px 35px;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+
+}
+
+#conteudo-principal {
+
+    padding: 35px;
+
+}
+
+/* ============================================================
+   CARDS
+============================================================ */
+
+.card {
+
+    background: white;
+
+    border-radius: 10px;
+
+    padding: 25px;
+
+    box-shadow: 0 2px 10px rgba(0,0,0,.08);
+
+}
+
+.card h2 {
+
+    margin-bottom: 18px;
+
+}
+
+/* ============================================================
+   BOTÕES
+============================================================ */
+
+.btn {
+
+    border: none;
+
+    padding: 10px 18px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    color: white;
+
+    font-size: 14px;
+
+}
+
+.btn i {
+
+    margin-right: 6px;
+
+}
+
+.btn-primary {
+
+    background: #1976d2;
+
+}
+
+.btn-primary:hover {
+
+    background: #0d47a1;
+
+}
+
+.btn-success {
+
+    background: #2e7d32;
+
+}
+
+.btn-success:hover {
+
+    background: #1b5e20;
+
+}
+
+.btn-danger {
+
+    background: #c62828;
+
+}
+
+.btn-danger:hover {
+
+    background: #8e0000;
+
+}
+
+.btn-warning {
+
+    background: #ef6c00;
+
+}
+
+.btn-warning:hover {
+
+    background: #c43c00;
+
+}
+
+/* ============================================================
+   TABELAS
+============================================================ */
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-top: 20px;
+
+    background: white;
+
+}
+
+thead {
+
+    background: #1f3c88;
+
+    color: white;
+
+}
+
+th {
+
+    padding: 14px;
+
+    text-align: left;
+
+}
+
+td {
+
+    padding: 14px;
+
+    border-bottom: 1px solid #ddd;
+
+}
+
+tbody tr:hover {
+
+    background: #f5f5f5;
+
+}
+
+/* ============================================================
+   FORMULÁRIOS
+============================================================ */
+
+.form-group {
+
+    margin-bottom: 18px;
+
+}
+
+.form-group label {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-weight: bold;
+
+}
+
+.form-group input,
+.form-group select {
+
+    width: 100%;
+
+    padding: 10px;
+
+    border: 1px solid #bbb;
+
+    border-radius: 5px;
+
+    font-size: 15px;
+
+}
+
+.form-group input:focus,
+.form-group select:focus {
+
+    outline: none;
+
+    border-color: #1976d2;
+
+}
+
+/* ============================================================
+   AÇÕES
+============================================================ */
+
+.acoes {
+
+    display: flex;
+
+    gap: 8px;
+
+}
+
+/* ============================================================
+   RESPONSIVO
+============================================================ */
+
+@media (max-width: 900px) {
+
+    .layout {
+
+        flex-direction: column;
+
+    }
+
+    .sidebar {
+
+        width: 100%;
+
+    }
+
+    .sidebar nav {
+
+        flex-direction: row;
+
+        flex-wrap: wrap;
+
+    }
+
+    .sidebar button {
+
+        flex: 1;
+
+        text-align: center;
+
+    }
+
+}
+
+/* ============================================================
+   CABEÇALHO DAS LISTAS
+============================================================ */
+
+.cabecalho-lista{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+.cabecalho-lista h2{
+
+    color:#1f3c88;
+
+}
