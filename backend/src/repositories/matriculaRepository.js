@@ -1,17 +1,30 @@
 const pool = require("../database/pg");
 
 const listarTodos = async () => {
-  const { rows } = await pool.query(`
-    SELECT
-      id,
-      aluno_id,
-      turma_id,
-      data_matricula
-    FROM matriculas
-    ORDER BY data_matricula DESC, id;
-  `);
 
-  return rows;
+  const resultado = await pool.query(
+
+    `SELECT
+
+        m.id,
+        a.nome AS aluno,
+        t.codigo AS turma,
+        m.data_matricula
+
+     FROM matriculas m
+
+     INNER JOIN alunos a
+       ON m.aluno_id = a.id
+
+     INNER JOIN turmas t
+       ON m.turma_id = t.id
+
+     ORDER BY a.nome, t.codigo`
+
+  );
+
+  return resultado.rows;
+
 };
 
 const buscarPorId = async (id) => {

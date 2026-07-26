@@ -385,3 +385,33 @@ tbody tr:hover {
     color:#1f3c88;
 
 }
+
+.status-aprovado {
+
+    color: #0f9d58;
+
+    font-weight: bold;
+
+}
+
+.status-reprovado {
+
+    color: #d93025;
+
+    font-weight: bold;
+
+}
+
+select {
+
+    width: 100%;
+
+    padding: 10px;
+
+    border-radius: 6px;
+
+    border: 1px solid #ccc;
+
+    font-size: 15px;
+
+}
