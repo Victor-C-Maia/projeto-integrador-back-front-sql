@@ -26,7 +26,7 @@ async function carregarAlunos() {
 
         </div>
 
-        <div
+        <form
             id="formularioAluno"
             class="formulario oculto">
 
@@ -58,7 +58,8 @@ async function carregarAlunos() {
 
             <br><br>
 
-            <button
+           <button
+                type="submit"
                 class="btn btn-success"
                 id="btnSalvarAluno">
 
@@ -67,6 +68,7 @@ async function carregarAlunos() {
             </button>
 
             <button
+                type="button"
                 class="btn btn-danger"
                 id="btnCancelarAluno">
 
@@ -74,7 +76,7 @@ async function carregarAlunos() {
 
             </button>
 
-        </div>
+        </form>
 
         <table>
 
@@ -99,9 +101,7 @@ async function carregarAlunos() {
 
     alunos.forEach(aluno => {
 
-        const data = aluno.data_nascimento
-            ? new Date(aluno.data_nascimento).toLocaleDateString("pt-BR")
-            : "-";
+        const data = formatarData(aluno.data_nascimento);
 
         html += `
 
@@ -152,16 +152,16 @@ async function carregarAlunos() {
     conteudo.innerHTML = html;
 
     document
-    .getElementById("btnNovoAluno")
-    .addEventListener("click", mostrarFormularioAluno);
+        .getElementById("btnNovoAluno")
+        .addEventListener("click", mostrarFormularioAluno);
 
-document
-    .getElementById("btnCancelarAluno")
-    .addEventListener("click", esconderFormularioAluno);
+    document
+        .getElementById("btnCancelarAluno")
+        .addEventListener("click", esconderFormularioAluno);
 
-document
-    .getElementById("btnSalvarAluno")
-    .addEventListener("click", salvarAluno);
+    document
+        .getElementById("btnSalvarAluno")
+        .addEventListener("click", salvarAluno);
 
 }
 
@@ -169,9 +169,7 @@ document
 
 function mostrarFormularioAluno() {
 
-    document
-        .getElementById("formularioAluno")
-        .classList.remove("oculto");
+    mostrar("formularioAluno");
 
 }
 
@@ -179,16 +177,14 @@ function mostrarFormularioAluno() {
 
 function esconderFormularioAluno() {
 
-    document
-        .getElementById("formularioAluno")
-        .classList.add("oculto");
+    esconder("formularioAluno");
 
 }
 
 // ======================================================
 
-async function salvarAluno() {
-
+async function salvarAluno(event) {
+    event.preventDefault();
     const nome =
         document.getElementById("nomeAluno").value.trim();
 
@@ -218,12 +214,17 @@ async function salvarAluno() {
 
     };
 
-    const resposta =
-        await criarRegistro("/alunos", aluno);
+    const resposta = await criarRegistro("/alunos", aluno);
 
     if (resposta) {
 
-        carregarAlunos();
+        limparFormulario("formularioAluno");
+
+        esconder("formularioAluno");
+
+        await carregarAlunos();
+
+        mostrarMensagem("Aluno cadastrado com sucesso.");
 
     }
 

@@ -48,11 +48,9 @@ async function carregarNotas() {
 
     notas.forEach(nota => {
 
-        const data = nota.data_avaliacao
-            ? new Date(nota.data_avaliacao).toLocaleDateString("pt-BR")
-            : "-";
+        const data = formatarData(nota.data_avaliacao);
 
-        const valorNota = Number(nota.nota).toFixed(2).replace(".", ",");
+        const valorNota = formatarNota(nota.nota);
 
         html += `
 
