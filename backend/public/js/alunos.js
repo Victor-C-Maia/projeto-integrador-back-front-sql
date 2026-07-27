@@ -10,23 +10,75 @@ async function carregarAlunos() {
 
     let html = `
 
-        <div class="card">
+    <div class="card">
 
-            <div class="cabecalho-lista">
+        <div class="cabecalho-lista">
 
-                <h2>Cadastro de Alunos</h2>
+            <h2>Cadastro de Alunos</h2>
 
-                <button class="btn btn-success">
+            <button
+                class="btn btn-success"
+                id="btnNovoAluno">
 
-                    Novo Aluno
+                Novo Aluno
 
-                </button>
+            </button>
 
-            </div>
+        </div>
 
-            <table>
+        <div
+            id="formularioAluno"
+            class="formulario oculto">
 
-                <thead>
+            <h3>Novo Aluno</h3>
+
+            <label>Nome</label>
+
+            <input
+                type="text"
+                id="nomeAluno">
+
+            <label>Email</label>
+
+            <input
+                type="email"
+                id="emailAluno">
+
+            <label>Matrícula</label>
+
+            <input
+                type="text"
+                id="matriculaAluno">
+
+            <label>Data de nascimento</label>
+
+            <input
+                type="date"
+                id="dataNascimentoAluno">
+
+            <br><br>
+
+            <button
+                class="btn btn-success"
+                id="btnSalvarAluno">
+
+                Salvar
+
+            </button>
+
+            <button
+                class="btn btn-danger"
+                id="btnCancelarAluno">
+
+                Cancelar
+
+            </button>
+
+        </div>
+
+        <table>
+
+            <thead>
 
                     <tr>
 
@@ -98,5 +150,81 @@ async function carregarAlunos() {
     `;
 
     conteudo.innerHTML = html;
+
+    document
+    .getElementById("btnNovoAluno")
+    .addEventListener("click", mostrarFormularioAluno);
+
+document
+    .getElementById("btnCancelarAluno")
+    .addEventListener("click", esconderFormularioAluno);
+
+document
+    .getElementById("btnSalvarAluno")
+    .addEventListener("click", salvarAluno);
+
+}
+
+// ======================================================
+
+function mostrarFormularioAluno() {
+
+    document
+        .getElementById("formularioAluno")
+        .classList.remove("oculto");
+
+}
+
+// ======================================================
+
+function esconderFormularioAluno() {
+
+    document
+        .getElementById("formularioAluno")
+        .classList.add("oculto");
+
+}
+
+// ======================================================
+
+async function salvarAluno() {
+
+    const nome =
+        document.getElementById("nomeAluno").value.trim();
+
+    const email =
+        document.getElementById("emailAluno").value.trim();
+
+    const matricula =
+        document.getElementById("matriculaAluno").value.trim();
+
+    const data_nascimento =
+        document.getElementById("dataNascimentoAluno").value;
+
+    if (!nome || !email || !matricula) {
+
+        alert("Preencha os campos obrigatórios.");
+
+        return;
+
+    }
+
+    const aluno = {
+
+        nome,
+        email,
+        matricula,
+        data_nascimento
+
+    };
+
+    const resposta =
+        await criarRegistro("/alunos", aluno);
+
+    if (resposta) {
+
+        carregarAlunos();
+
+    }
 
 }
