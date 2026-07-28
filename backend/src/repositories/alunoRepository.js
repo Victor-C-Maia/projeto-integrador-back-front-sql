@@ -9,7 +9,7 @@ const listarTodos = async () => {
       matricula,
       data_nascimento
     FROM alunos
-    ORDER BY nome;
+    ORDER BY id;
   `);
 
   return rows;

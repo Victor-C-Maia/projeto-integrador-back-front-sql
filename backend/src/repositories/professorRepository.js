@@ -8,7 +8,7 @@ const listarTodos = async () => {
       email,
       especialidade
     FROM professores
-    ORDER BY nome;
+    ORDER BY id;
   `);
 
   return rows;

@@ -19,7 +19,7 @@ const listarTodos = async () => {
      INNER JOIN turmas t
        ON m.turma_id = t.id
 
-     ORDER BY a.nome, t.codigo`
+     ORDER BY m.id, t.codigo`
 
   );
 

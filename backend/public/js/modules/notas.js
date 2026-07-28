@@ -6,51 +6,158 @@ async function carregarNotas() {
 
     tituloPagina.textContent = "Notas";
 
-    const notas = await buscarDados("/notas");
+    const [notas, matriculas] = await Promise.all([
+        buscarDados("/notas"),
+        buscarDados("/matriculas")
+    ]);
 
-    let html = `
+    conteudo.innerHTML = `
 
         <div class="card">
 
-            <div class="cabecalho-lista">
+            ${renderizarFormularioNota(matriculas)}
 
-                <h2>Lançamento de Notas</h2>
+            ${renderizarTabelaNotas(notas)}
 
-                <button class="btn btn-success">
+        </div>
 
-                    Nova Nota
+    `;
 
-                </button>
+    registrarEventosNota();
 
-            </div>
+}
 
-            <table>
+// ======================================================
+// FORMULÁRIO
+// ======================================================
 
-                <thead>
+function renderizarFormularioNota(matriculas) {
 
-                    <tr>
+    return `
 
-                        <th>ID</th>
-                        <th>Aluno</th>
-                        <th>Turma</th>
-                        <th>Nota</th>
-                        <th>Tipo</th>
-                        <th>Data da Avaliação</th>
-                        <th>Ações</th>
+        <div class="cabecalho-lista">
 
-                    </tr>
+            <h2>Cadastro de Notas</h2>
 
-                </thead>
+            <button
+                class="btn btn-success"
+                id="btnNovaNota">
 
-                <tbody>
+                Nova Nota
+
+            </button>
+
+        </div>
+
+        <form
+            id="formularioNota"
+            class="formulario oculto">
+
+            <h3>Nova Nota</h3>
+
+            <label>Matrícula</label>
+
+            <select
+                id="matriculaNota"
+                required>
+
+                <option value="">Selecione...</option>
+
+                ${matriculas.map(matricula => `
+
+                    <option value="${matricula.id}">
+
+                        ${matricula.aluno}
+                        -
+                        ${matricula.turma}
+
+                    </option>
+
+                `).join("")}
+
+            </select>
+
+            <label>Nota</label>
+
+            <input
+                type="number"
+                id="valorNota"
+                min="0"
+                max="10"
+                step="0.01"
+                required>
+
+            <label>Tipo</label>
+
+            <input
+                type="text"
+                id="tipoNota"
+                placeholder="Prova"
+                required>
+
+            <label>Data da Avaliação</label>
+
+            <input
+                type="date"
+                id="dataNota"
+                required>
+
+            <br><br>
+
+            <button
+                type="submit"
+                class="btn btn-success">
+
+                Salvar
+
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-danger"
+                id="btnCancelarNota">
+
+                Cancelar
+
+            </button>
+
+        </form>
+
+    `;
+
+}
+
+// ======================================================
+// TABELA
+// ======================================================
+
+function renderizarTabelaNotas(notas) {
+
+    let html = `
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+                    <th>Aluno</th>
+                    <th>Turma</th>
+                    <th>Nota</th>
+                    <th>Tipo</th>
+                    <th>Data</th>
+                    <th>Ações</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
 
     `;
 
     notas.forEach(nota => {
-
-        const data = formatarData(nota.data_avaliacao);
-
-        const valorNota = formatarNota(nota.nota);
 
         html += `
 
@@ -62,21 +169,25 @@ async function carregarNotas() {
 
                 <td>${nota.turma}</td>
 
-                <td>${valorNota}</td>
+                <td>${Number(nota.nota).toFixed(2)}</td>
 
                 <td>${nota.tipo}</td>
 
-                <td>${data}</td>
+                <td>${formatarData(nota.data_avaliacao)}</td>
 
                 <td>
 
-                    <button class="btn btn-primary">
+                    <button
+                        class="btn btn-primary btn-editar"
+                        data-id="${nota.id}">
 
                         Editar
 
                     </button>
 
-                    <button class="btn btn-danger">
+                    <button
+                        class="btn btn-danger btn-excluir"
+                        data-id="${nota.id}">
 
                         Excluir
 
@@ -92,14 +203,120 @@ async function carregarNotas() {
 
     html += `
 
-                </tbody>
+            </tbody>
 
-            </table>
-
-        </div>
+        </table>
 
     `;
 
-    conteudo.innerHTML = html;
+    return html;
+
+}
+
+// ======================================================
+// EVENTOS
+// ======================================================
+
+function registrarEventosNota() {
+
+    document
+        .getElementById("btnNovaNota")
+        .addEventListener("click", mostrarFormularioNota);
+
+    document
+        .getElementById("btnCancelarNota")
+        .addEventListener("click", esconderFormularioNota);
+
+    document
+        .getElementById("formularioNota")
+        .addEventListener("submit", salvarNota);
+
+}
+
+// ======================================================
+
+function mostrarFormularioNota() {
+
+    mostrar("formularioNota");
+
+}
+
+// ======================================================
+
+function esconderFormularioNota() {
+
+    esconder("formularioNota");
+
+}
+
+// ======================================================
+
+async function salvarNota(event) {
+
+    event.preventDefault();
+
+    const nota = {
+
+        matricula_id:
+            Number(
+                document
+                    .getElementById("matriculaNota")
+                    .value
+            ),
+
+        nota:
+            Number(
+                document
+                    .getElementById("valorNota")
+                    .value
+            ),
+
+        tipo:
+            document
+                .getElementById("tipoNota")
+                .value
+                .trim(),
+
+        data_avaliacao:
+            document
+                .getElementById("dataNota")
+                .value
+
+    };
+
+    if (
+
+        !nota.matricula_id ||
+
+        nota.nota === "" ||
+
+        isNaN(nota.nota) ||
+
+        !nota.tipo ||
+
+        !nota.data_avaliacao
+
+    ) {
+
+        mostrarMensagem("Preencha todos os campos.");
+
+        return;
+
+    }
+
+    const resposta =
+        await criarRegistro("/notas", nota);
+
+    if (resposta) {
+
+        limparFormulario("formularioNota");
+
+        esconder("formularioNota");
+
+        await carregarNotas();
+
+        mostrarMensagem("Nota cadastrada com sucesso.");
+
+    }
 
 }

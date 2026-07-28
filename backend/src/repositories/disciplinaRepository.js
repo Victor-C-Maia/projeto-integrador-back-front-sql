@@ -7,7 +7,7 @@ const listarTodos = async () => {
       nome,
       carga_horaria
     FROM disciplinas
-    ORDER BY nome;
+    ORDER BY id;
   `);
 
   return rows;
