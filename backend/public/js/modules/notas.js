@@ -2,6 +2,8 @@
 // NOTAS
 // ======================================================
 
+let notaEmEdicao = null;
+
 async function carregarNotas() {
 
     tituloPagina.textContent = "Notas";
@@ -53,7 +55,11 @@ function renderizarFormularioNota(matriculas) {
             id="formularioNota"
             class="formulario oculto">
 
-            <h3>Nova Nota</h3>
+            <h3 id="tituloFormularioNota">
+
+                Nova Nota
+
+            </h3>
 
             <label>Matrícula</label>
 
@@ -106,7 +112,8 @@ function renderizarFormularioNota(matriculas) {
 
             <button
                 type="submit"
-                class="btn btn-success">
+                class="btn btn-success"
+                id="btnSalvarNota">
 
                 Salvar
 
@@ -230,12 +237,51 @@ function registrarEventosNota() {
     document
         .getElementById("formularioNota")
         .addEventListener("submit", salvarNota);
+    document
+        .querySelectorAll(".btn-editar")
+        .forEach(botao => {
+
+            botao.addEventListener("click", () => {
+
+                editarNota(botao.dataset.id);
+
+            });
+
+        });
+
+    document
+        .querySelectorAll(".btn-excluir")
+        .forEach(botao => {
+
+            botao.addEventListener("click", () => {
+
+                excluirNota(botao.dataset.id);
+
+            });
+
+        });
 
 }
 
 // ======================================================
 
 function mostrarFormularioNota() {
+
+    notaEmEdicao = null;
+
+    limparFormulario("formularioNota");
+
+    document
+        .getElementById("matriculaNota")
+        .selectedIndex = 0;
+
+    document
+        .getElementById("tituloFormularioNota")
+        .textContent = "Nova Nota";
+
+    document
+        .getElementById("btnSalvarNota")
+        .textContent = "Salvar";
 
     mostrar("formularioNota");
 
@@ -304,8 +350,34 @@ async function salvarNota(event) {
 
     }
 
-    const resposta =
-        await criarRegistro("/notas", nota);
+    let resposta;
+
+    let mensagemSucesso;
+
+    if (notaEmEdicao === null) {
+
+        resposta =
+            await criarRegistro("/notas", nota);
+
+        mensagemSucesso =
+            "Nota cadastrada com sucesso.";
+
+    }
+    else {
+
+        resposta =
+            await atualizarRegistro(
+
+                "/notas/" + notaEmEdicao,
+
+                nota
+
+            );
+
+        mensagemSucesso =
+            "Nota atualizada com sucesso.";
+
+    }
 
     if (resposta) {
 
@@ -313,9 +385,88 @@ async function salvarNota(event) {
 
         esconder("formularioNota");
 
+        notaEmEdicao = null;
+
         await carregarNotas();
 
-        mostrarMensagem("Nota cadastrada com sucesso.");
+        mostrarMensagem(mensagemSucesso);
+
+    }
+
+}
+
+async function editarNota(id) {
+
+    const nota =
+        await buscarDados("/notas/" + id);
+
+    if (!nota) {
+
+        mostrarMensagem("Nota não encontrada.");
+
+        return;
+
+    }
+
+    notaEmEdicao = nota.id;
+
+    document
+        .getElementById("matriculaNota")
+        .value = nota.matricula_id;
+
+    document
+        .getElementById("valorNota")
+        .value = nota.nota;
+
+    document
+        .getElementById("tipoNota")
+        .value = nota.tipo;
+
+    document
+        .getElementById("dataNota")
+        .value =
+            nota.data_avaliacao
+                ? nota.data_avaliacao.substring(0, 10)
+                : "";
+
+    document
+        .getElementById("tituloFormularioNota")
+        .textContent = "Editar Nota";
+
+    document
+        .getElementById("btnSalvarNota")
+        .textContent = "Atualizar";
+
+    mostrar("formularioNota");
+
+}
+
+async function excluirNota(id) {
+
+    const confirmar = confirm(
+
+        "Deseja realmente excluir esta nota?"
+
+    );
+
+    if (!confirmar) {
+
+        return;
+
+    }
+
+    const sucesso =
+        await excluirRegistro("/notas/" + id);
+
+    if (sucesso) {
+
+        await carregarNotas();
+
+        mostrarMensagem(
+
+            "Nota excluída com sucesso."
+
+        );
 
     }
 

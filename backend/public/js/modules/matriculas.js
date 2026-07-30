@@ -102,13 +102,6 @@ function renderizarFormularioMatricula(alunos, turmas) {
 
             </select>
 
-            <label>Data da Matrícula</label>
-
-            <input
-                type="date"
-                id="dataMatricula"
-                required>
-
             <br><br>
 
             <button
@@ -307,27 +300,30 @@ async function salvarMatricula(event) {
     const matricula = {
 
         aluno_id:
-            Number(document.getElementById("alunoMatricula").value),
+            Number(
+                document.getElementById("alunoMatricula").value
+            ),
 
         turma_id:
-            Number(document.getElementById("turmaMatricula").value),
-
-        data_matricula:
-            document.getElementById("dataMatricula").value
+            Number(
+                document.getElementById("turmaMatricula").value
+            )
 
     };
 
     if (
+
         !matricula.aluno_id ||
-        !matricula.turma_id ||
-        !matricula.data_matricula
+
+        !matricula.turma_id
+
     ) {
 
         mostrarMensagem("Preencha todos os campos.");
 
         return;
 
-    }
+}
 
     let resposta;
 
@@ -397,12 +393,12 @@ async function editarMatricula(id) {
         .getElementById("turmaMatricula")
         .value = matricula.turma_id;
 
-    document
-        .getElementById("dataMatricula")
-        .value =
-            matricula.data_matricula
-                ? matricula.data_matricula.substring(0, 10)
-                : "";
+    // document
+    //     .getElementById("dataMatricula")
+    //     .value =
+    //         matricula.data_matricula
+    //             ? matricula.data_matricula.substring(0, 10)
+    //             : "";
 
     document
         .getElementById("tituloFormularioMatricula")
